@@ -10,7 +10,6 @@ object CoinFlip extends App {
   val s = GameState(0, 0)
   mainLoop(s, r)
 
-  @tailrec
   def mainLoop(gameState: GameState, random: Random) {
 
     showPrompt()
