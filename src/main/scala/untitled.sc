@@ -1,6 +1,7 @@
 trait Monoid[A] {
   def op(a1: A, a2: A): A
   def zero: A
+
 }
 
 val listMonoid: Monoid[List[String]] = new Monoid[List[String]] {
@@ -34,8 +35,8 @@ case class IntModulo(value:Int) extends Monoid[Int] {
   val _f = (a:Int) => if(a < value ) a else a % value
 }
 
- val intModulo: IntModulo = IntModulo(2) // Z[2]
-implicit val intMonoid: IntMonoid = IntMonoid() // Z
+implicit val intModulo: IntModulo = IntModulo(2) // Z[2]
+ val intMonoid: IntMonoid = IntMonoid() // Z
 
 def sum[A,B](as: List[A], m: Monoid[B])(f: A => B): B =
   as.map(a => f(a)).foldLeft(m.zero)(m.op)
@@ -43,10 +44,14 @@ def sum[A,B](as: List[A], m: Monoid[B])(f: A => B): B =
 val test = sum(List(1,2,3),intModulo)(intModulo._f)
 val test2 = sum(List(1,2,3),intModulo)(intMonoid._f)
 
-def otherSum[A,B](as: List[A])(f: A => B)(implicit m: Monoid[B]): B =
-  as.map(a => f(a)).foldLeft(m.zero)(m.op)
+def sumContext[A,B](as: List[A])(f: A => B)(implicit m: Monoid[B]): B =
+  as.map(f).foldLeft(m.zero)(m.op)
 
 
 val _f = (a:Int) => a
-otherSum(List(1,2,3))(_f)
+
+sumContext(List(1,2,3))(_f)
+
+
+
 
